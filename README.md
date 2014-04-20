@@ -49,3 +49,33 @@ $ rm -f Gemfile.lock
 $ rm -rf .bundle
 $ rm -rf vendor/bundle
 ```
+
+# mysqlセットアップ
+## for mac
+- http://tukaikta.blog135.fc2.com/blog-entry-197.html
+
+```
+$ brew install mysql
+$ unset TMPDIR
+$ mysql_install_db --verbose --user=`whoami` --basedir="$(brew --prefix mysql)" --datadir=/usr/local/var/mysql --tmpdir=/tmp
+$ mysql.server start
+$ mysqladmin -u root password 'new-password'
+$ mysqladmin -u root -h kikaigyo.local password 'new-password'
+```
+- その他諸々上記URLの通り設定する。
+
+### ユーザ作る
+
+```
+mysql> create user wedcam_user identified by 'wedcam_user';
+mysql> grant all on *.* to wedcam_user@localhost;
+mysql> set password for 'wedcam_user'@'localhost' = PASSWORD('wedcam_user');
+mysql> create database wedcam_development;
+mysql> create database wedcam_test;
+mysql> create database wedcam_production;
+```
+
+### dbを作る
+```
+$ bundle exec rake db:migrate
+```
